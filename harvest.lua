@@ -21,6 +21,7 @@ local startPos = "right"
 -- 4) Turn (left or right) and skip 0 rows
 -- 5) Go up harvesting row 6
 -- ... and repeat
+-- To harvest all rows use: skipRows = { }
 local skipRows = { 3, 0 }
 
 --
@@ -61,6 +62,13 @@ local function digForward()
     turtle.dig()
     turtle.forward()
 end
+local function dropAll()
+    for slot = 1, 9 do
+        turtle.select(slot)
+        turtle.drop()
+    end
+    turtle.select(1)
+end
 
 local skipIndex = 0
 local function skipForward()
@@ -84,7 +92,8 @@ local nextLeft = (startPos == "right")
 local function harvestGrid()
 
     -- For each column in square
-    for y = 1, width do
+    local y = 1
+    while y <= width do
         -- For each row in square
         for x = 1, length - 1 do
             digForward()
@@ -105,6 +114,7 @@ local function harvestGrid()
                 nextLeft = true
             end
         end
+        y = y + 1
     end
 
     -- Return to home position
@@ -115,7 +125,7 @@ local function harvestGrid()
             for y = 1, width - 1 do
                 digForward()
             end
-            turtle.turnLeft()
+            turtle.turnRight()
             for x = 1, length - 1 do
                 digForward()
             end
@@ -125,7 +135,7 @@ local function harvestGrid()
             for y = 1, width - 1 do
                 digForward()
             end
-            turtle.turnLeft()
+            turtle.turnRight()
         end
     else
         if nextLeft == true then
@@ -162,7 +172,7 @@ while not done do
     harvestGrid()
     -- Drop anything collected
     aboutFace()
-    turtle.drop()
+    dropAll()
     -- Re-orient turtle to starting position
     aboutFace()
 
