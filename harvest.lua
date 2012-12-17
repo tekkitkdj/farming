@@ -67,7 +67,7 @@ local function skipForward()
     local numSkip = 0
     if #skipRows > 0 then
         skipIndex = skipIndex + 1
-        if skipIndex > #skipIndex then
+        if skipIndex > #skipRows then
             skipIndex = 1
         end
         numSkip = skipRows[skipIndex]
