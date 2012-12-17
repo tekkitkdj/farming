@@ -2,6 +2,9 @@
 local loopCount = -1
 -- How long to wait between loops (90 seconds seems pretty good for sugarcane)
 local sleepSecs = 90
+-- Pattern to skip over water row(s)
+local skipRows = { 1, 0 }
+
 
 local progArgs = { ... }
 
@@ -37,6 +40,22 @@ local function digForward()
     turtle.forward()
 end
 
+local skipIndex = 0
+local function skipForward()
+    local numSkip = 0
+    if #skipRows > 0 then
+        skipIndex = skipIndex + 1
+        if skipIndex > #skipIndex then
+            skipIndex = 1
+        end
+        numSkip = skipRows[skipIndex]
+        for skip = 1, numSkip do
+            digForward()
+        end
+    end
+    return numSkip
+end
+
 -- Assume starting on (already dug) bottom-left corner
 local function mineLevel()
     -- Next direction to turn
@@ -52,11 +71,13 @@ local function mineLevel()
         if y < width then
             if nextLeft == true then
                 turtle.turnLeft()
+                y = y + skipForward()
                 digForward()
                 turtle.turnLeft()
                 nextLeft = false
             else
                 turtle.turnRight()
+                y = y + skipForward()
                 digForward()
                 turtle.turnRight()
                 nextLeft = true
