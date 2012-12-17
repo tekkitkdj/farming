@@ -86,10 +86,11 @@ local function skipForward()
     return numSkip
 end
 
-local nextLeft = (startPos == "right")
-
 -- Assume starting on (already dug) corner
 local function harvestGrid()
+
+    skipIndex = 0
+    local nextLeft = (startPos == "right")
 
     -- For each column in square
     local y = 1
