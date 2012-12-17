@@ -4,8 +4,8 @@
 --
 
 local tArgs = { ... }
-if #tArgs ~= 1 then
-    print( "Usage: superExcavate <diameter>" )
+if #tArgs < 1 then
+    print( "Usage: superExcavate <diameter> [<max-depth>]" )
     return
 end
 
@@ -14,6 +14,11 @@ local size = tonumber( tArgs[1] )
 if size < 1 then
     print( "Excavate diameter must be positive" )
     return
+end
+
+local maxDepth = -1
+if #tArgs > 1 then
+    maxDepth = tonumber( tArgs[2] )
 end
 
 local depth = 0
@@ -78,6 +83,12 @@ local function tryDown()
     depth = depth + 1
     if math.fmod( depth, 10 ) == 0 then
         print( "Descended " .. depth .. " metres." )
+    end
+    if maxDepth > 0 then
+        if depth > maxDepth then
+            print( "Reached (requested) maximum depth of " .. depth .. " metres - aborting mine." )
+            return false
+        end
     end
     return true
 end
@@ -230,7 +241,6 @@ while not allDone do
 
     -- Dump Load
     print( "Dropping load..." )
-    -- TODO: Check if we need to move back a square
     aboutFace()
     for slot = 1, 9 do
         turtle.select(slot)
