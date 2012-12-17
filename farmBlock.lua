@@ -39,13 +39,20 @@ local function digForward()
     turtle.dig()
     turtle.forward()
 end
+local function dropAll()
+    for slot = 1, 9 do
+        turtle.select(slot)
+        turtle.drop()
+    end
+    turtle.select(1)
+end
 
 local skipIndex = 0
 local function skipForward()
     local numSkip = 0
     if #skipRows > 0 then
         skipIndex = skipIndex + 1
-        if skipIndex > #skipIndex then
+        if skipIndex > #skipRows then
             skipIndex = 1
         end
         numSkip = skipRows[skipIndex]
@@ -58,11 +65,13 @@ end
 
 -- Assume starting on (already dug) bottom-left corner
 local function mineLevel()
+    skipIndex = 0
     -- Next direction to turn
     local nextLeft = false
 
     -- For each column in block
-    for y = 1, width do
+    local y = 1
+    while y <= width do
         -- For each row in block
         for x = 1, length - 1 do
             digForward()
@@ -83,6 +92,7 @@ local function mineLevel()
                 nextLeft = true
             end
         end
+        y = y + 1
     end
 
     -- Return to home position
@@ -119,7 +129,7 @@ while not done do
     mineLevel()
     -- Drop anything collected
     aboutFace()
-    turtle.drop()
+    dropAll()
     -- Re-orient turtle to starting position
     aboutFace()
 
