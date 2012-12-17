@@ -60,7 +60,12 @@ local function aboutFace()
 end
 local function digForward()
     turtle.dig()
-    turtle.forward()
+    -- Keep trying (i.e. digging) until we can move forward
+    -- to support falling blocks (gravel, sand, etc) and/or blocking mobs
+    while not turtle.forward() do
+        turtle.dig()
+        sleep(1)
+    end
 end
 local function dropAll()
     for slot = 1, 9 do
