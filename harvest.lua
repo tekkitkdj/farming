@@ -147,7 +147,7 @@ local function harvestGrid()
                 digForward()
             end
         else
-            -- Currently at bottom-right - facing down
+            -- Currently at bottom-left - facing down
             turtle.turnLeft()
             for y = 1, width - 1 do
                 digForward()
