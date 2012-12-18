@@ -45,11 +45,22 @@ local function digForward()
     end
 end
 local function dropAll()
+    local moveExtra = turtle.forward()
     for slot = 1, 9 do
-        turtle.select(slot)
-        turtle.drop()
+        if turtle.getItemCount(slot) > 0 then
+            turtle.select(slot)
+            turtle.drop()
+            sleep(0.5)
+        end
     end
     turtle.select(1)
+    if moveExtra then
+        if not turtle.back() then
+            aboutFace()
+            digForward()
+            aboutFace()
+        end
+    end
 end
 
 local skipIndex = 0
